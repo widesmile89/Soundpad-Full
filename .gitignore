@@ -6,5 +6,6 @@ node_moudels
 configdb
 
 .env
+
 .gitignore
 

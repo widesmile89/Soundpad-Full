@@ -21,7 +21,7 @@ app.use(express.json())
 
 //router
 app.use("/api/auth",require("./routes/auth"))
-
+app.use("/api/users",require("./routes/users"))
 
 
 
