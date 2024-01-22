@@ -112,15 +112,15 @@ if(user){
     res.status(200).json({
         status_code: 1,
         message: "logged in successfuly",
-        data: {...other},
-        error:null
-
+        data: {
+            ...other,
+            token: thisToken
+        }
     })
 
 }else{
 
     res.status(404).json({
-
             status_Code: -2,
             message: "user not found" ,
             error: "user not found",
@@ -128,6 +128,10 @@ if(user){
     })
 
 }
+
+
+
+
 })
 
 module.exports = router

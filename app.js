@@ -1,7 +1,5 @@
 const express = require('express')
 const connectingDataBase = require ("./configdb/dataBase")
-const Apierror=require("./core/middlewere/utils/error")
-
 require("dotenv").config()
 
 connectingDataBase()
