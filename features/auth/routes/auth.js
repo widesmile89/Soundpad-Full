@@ -89,10 +89,11 @@ router.post(("/login"),async(req,res) =>{
     }
 
 
-const user = await User.updateOne(
+const user = await User.findOne(
     { email:req.body.email },
-    { $push: { tokens: user.generateToken() } }  // Assuming "tokens" is the name of the array field
 )
+
+user.generateToken()
 
 const{ password,...other } = user._doc
 
