@@ -16,16 +16,21 @@ const router=express.Router()
 router.post(("/register"),async(req,res)=>{
 
     const {error}= registerValidation(req.body)
+
     if(error){
         res.status(400).json({
-            status_code:-1,
-                message:error.message,
-                data:null
+
+                status_code:-1,
+                message: error.message,
+                data: null,
+                error: error.message
         })
 
     }
 
-    let user = await User.findOne({email:req.body.email})
+    let user = await User.findOne({
+        email:req.body.email
+    })
 
     if(!user){
 
@@ -50,7 +55,7 @@ router.post(("/register"),async(req,res)=>{
     res.status(200).json({
         status_Code:1,
         message:"success process",
-        data:[...other,token],
+        data: {...other,token}
 
     });
 
@@ -59,11 +64,11 @@ router.post(("/register"),async(req,res)=>{
         res.status(400).json({  
 
             status_Code:-1,
-             message:"user is already register",
-             error:error.message,
-             data:null
-
-            })
+            message:"user is already register",
+            error: "user is already register",
+            data:null
+            
+        })
     }
 
 })
@@ -84,10 +89,19 @@ router.post(("/login"),async(req,res) =>{
     }
 
 
-const user = await User.findOne({email:req.body.email})
+const user = await User.updateOne(
+    { email:req.body.email },
+    { $push: { tokens: user.generateToken() } }  // Assuming "tokens" is the name of the array field
+)
+
+const{ password,...other } = user._doc
 
 if(user){
-    res.status(200).json(user)
+    res.status(200).json({
+        status_code: 1,
+        message: "logged in successfuly",
+        data: {...other}
+    })
 
 }else{
 
