@@ -1,5 +1,5 @@
 const express = require('express')
-const connectingDataBase = require ("./configdb/dataBase")
+const connectingDataBase = require ("./core/configdb/dataBase")
 require("dotenv").config()
 
 connectingDataBase()

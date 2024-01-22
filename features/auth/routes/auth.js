@@ -94,7 +94,7 @@ router.post(("/login"),async(req,res) =>{
 
 
 const user = await User.findOne(
-    { email:req.body.email },
+    { email: req.body.email },
 )
 
 const thisToken = user.generateToken()
