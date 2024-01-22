@@ -55,7 +55,10 @@ router.post(("/register"),async(req,res)=>{
     res.status(200).json({
         status_Code:1,
         message:"success process",
-        data: {...other,token}
+        data: {
+            ...other,
+            token : token
+        }
 
     });
 
@@ -77,13 +80,14 @@ router.post(("/register"),async(req,res)=>{
 
 router.post(("/login"),async(req,res) =>{
 
-    const {error}=loginValidation(req.body)
+    const {error} = loginValidation(req.body)
+
     if(error){
         res.status(400).json({
             
-                status_code:-2,
-                message:error.message,
-                data:null
+                status_code: -2,
+                message: error.message,
+                data: null
 
         })
     }
@@ -93,28 +97,35 @@ const user = await User.findOne(
     { email:req.body.email },
 )
 
-user.generateToken()
+const thisToken = user.generateToken()
 
-const{ password,...other } = user._doc
+user.token.push(thisToken)
+user.save()
+
+const{
+     password,
+     token,
+    ...other 
+} = user._doc
 
 if(user){
     res.status(200).json({
         status_code: 1,
         message: "logged in successfuly",
-        data: {...other}
+        data: {
+            ...other,
+            token: thisToken
+        }
     })
 
 }else{
 
     res.status(404).json({
-         
-
-            status_Code:-2,
-             message:"user not found",
-             error:error.message,
-             data:null
-
-            })
+            status_Code: -2,
+            message: "user not found" ,
+            error: "user not found",
+            data:null
+    })
 
 }
 
