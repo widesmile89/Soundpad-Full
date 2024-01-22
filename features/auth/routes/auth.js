@@ -57,17 +57,17 @@ router.post(("/register"),async(req,res)=>{
         data: {...other,token},
         error:null
 
+
     });
 
     } else{
 
-        res.status(400).json({  
+        res.status(400).json({
 
             status_Code:-1,
             message:"user is already register",
             error: "user is already register",
             data:null
-            
         })
     }
 
@@ -77,7 +77,8 @@ router.post(("/register"),async(req,res)=>{
 
 router.post(("/login"),async(req,res) =>{
 
-    const {error}=loginValidation(req.body)
+    const {error} = loginValidation(req.body)
+
     if(error){
         res.status(400).json({
             
@@ -87,16 +88,25 @@ router.post(("/login"),async(req,res) =>{
                 error:null
 
 
+
         })
     }
 
 
-const user = await User.updateOne(
+const user = await User.findOne(
     { email:req.body.email },
-    { $push: { tokens: user.generateToken() } }  // Assuming "tokens" is the name of the array field
 )
 
-const{ password,...other } = user._doc
+const thisToken = user.generateToken()
+
+user.token.push(thisToken)
+user.save()
+
+const{
+     password,
+     token,
+    ...other 
+} = user._doc
 
 if(user){
     res.status(200).json({
@@ -111,13 +121,11 @@ if(user){
 
     res.status(404).json({
 
-
-            status_Code:-2,
-             message:"user not found",
-             error:error.message,
-             data:null
-
-            })
+            status_Code: -2,
+            message: "user not found" ,
+            error: "user not found",
+            data:null
+    })
 
 }
 })
