@@ -5,7 +5,14 @@ const {User,registerValidation,
 const router=express.Router()
 
 
-
+/**
+ * @desc Add New User
+ * @route api/auth/register
+ * @method post
+ * @access public
+ * @status_code (-1) => ( already register) , (-2)=>(not found)
+ * @status_code (1) => ( success)
+ */
 router.post(("/register"),async(req,res)=>{
 
     const {error}= registerValidation(req.body)
@@ -40,10 +47,23 @@ router.post(("/register"),async(req,res)=>{
 
     const{password,...other} = user._doc
 
-    res.status(200).json({...other,token});
+    res.status(200).json({
+        status_Code:1,
+        message:"success process",
+        data:[...other,token],
+
+    });
 
     } else{
-        res.status(400).json({message:"user is already register"})
+
+        res.status(400).json({  
+
+            status_Code:-1,
+             message:"user is already register",
+             error:error.message,
+             data:null
+
+            })
     }
 
 })
@@ -71,7 +91,15 @@ if(user){
 
 }else{
 
-    res.status(404).json({message:"user not found"})
+    res.status(404).json({
+         
+
+            status_Code:-2,
+             message:"user not found",
+             error:error.message,
+             data:null
+
+            })
 
 }
 
