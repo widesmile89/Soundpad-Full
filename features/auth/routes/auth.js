@@ -51,11 +51,11 @@ router.post(("/register"),async(req,res)=>{
 
 
     const{password,...other} = user._doc
-
     res.status(200).json({
         status_Code:1,
         message:"success process",
-        data: {...other,token}
+        data: {...other,token},
+        error:null
 
     });
 
@@ -83,7 +83,9 @@ router.post(("/login"),async(req,res) =>{
             
                 status_code:-2,
                 message:error.message,
-                data:null
+                data:null,
+                error:null
+
 
         })
     }
@@ -100,13 +102,15 @@ if(user){
     res.status(200).json({
         status_code: 1,
         message: "logged in successfuly",
-        data: {...other}
+        data: {...other},
+        error:null
+
     })
 
 }else{
 
     res.status(404).json({
-         
+
 
             status_Code:-2,
              message:"user not found",
@@ -116,16 +120,7 @@ if(user){
             })
 
 }
-
-
-
-
 })
-
-
-
-
-
 
 module.exports = router
 

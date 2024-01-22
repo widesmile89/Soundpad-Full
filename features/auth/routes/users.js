@@ -23,8 +23,9 @@ router.get(("/"),async(req,res)=>{
             res.status(200).json({
                 status_code:1,
                 message:"Success Process ",
-                
-                data:user
+                data:user,
+                error:null
+
             })
 
         }else{
@@ -33,13 +34,18 @@ router.get(("/"),async(req,res)=>{
 
                 status_code:-1,
                 message:"User is Not Found ",
-                error:error,
+                error:error.message,
                 data:null
             })
         }
     } catch (error) {
 
-        res.status(400).json({message:message.error})
+        res.status(400).json({
+            status_code:-1,
+                message:"Server is dowen ",
+                error:error.message,
+                data:null
+        })
         
     }
 })
@@ -49,20 +55,34 @@ router.route("/:id")
 .get( async(req,res)=>{
 
     const user =await User.findById(req.params.id)
-      if(user){res.status(200).json(user)
+      if(user){
+        res.status(200).json({
+            status_code:1,
+                message:"User is found ",
+                error:null,
+                data:user
+        })
     }})
 
 .put(async(req,res)=>{
 
     if(!req.body.id == req.params.id){
-        return res.status(201).json({message:`you are can't edit profile`})
+        return res.status(201).json({
+            status_code:-1,
+            message:`you are can't edit profile`,
+                error:error.message,
+                data:null 
+        })
     }
 
 
     const {error}=updateValidation(req.body)
         if(error){
             return res.status(400).json({
-                message:error.message })
+                message:error.message 
+            
+            
+            })
             }
 
                 
