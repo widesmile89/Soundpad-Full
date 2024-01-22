@@ -90,44 +90,46 @@ router.post(("/login"),async(req,res) =>{
                 data: null
 
         })
+    } else {
+        const user = await User.findOne(
+            { email: req.body.email },
+        )
+        
+        const thisToken = user.generateToken()
+        
+        user.token.push(thisToken)
+        user.save()
+        
+        const{
+             password,
+             token,
+            ...other 
+        } = user._doc
+        
+        if(user){
+            res.status(200).json({
+                status_code: 1,
+                message: "logged in successfuly",
+                data: {
+                    ...other,
+                    token: thisToken
+                }
+            })
+        
+        }else{
+        
+            res.status(404).json({
+                    status_Code: -2,
+                    message: "user not found" ,
+                    error: "user not found",
+                    data:null
+            })
+        
+        }
     }
 
 
-const user = await User.findOne(
-    { email: req.body.email },
-)
 
-const thisToken = user.generateToken()
-
-user.token.push(thisToken)
-user.save()
-
-const{
-     password,
-     token,
-    ...other 
-} = user._doc
-
-if(user){
-    res.status(200).json({
-        status_code: 1,
-        message: "logged in successfuly",
-        data: {
-            ...other,
-            token: thisToken
-        }
-    })
-
-}else{
-
-    res.status(404).json({
-            status_Code: -2,
-            message: "user not found" ,
-            error: "user not found",
-            data:null
-    })
-
-}
 
 
 
