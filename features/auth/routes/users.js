@@ -1,4 +1,6 @@
 const express = require("express")
+
+const AuthController=require("../controller/auth_controller")
 // const {verifytokenAndAdmin,verifytokenAndAdmin}=require("../middlewere/verifyToken")
 const {User,updateValidation} = require("../model/user")
 const bcrypt=require("bcrypt")

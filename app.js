@@ -1,5 +1,6 @@
 const express = require('express')
-const connectingDataBase = require ("./configdb/dataBase")
+const connectingDataBase = require ("./core/configdb/dataBase")
+const Apierror=require("./core/middlewere/utils/error")
 require("dotenv").config()
 
 connectingDataBase()
@@ -9,12 +10,14 @@ const app = express()
 //middle were
 app.use(express.json())
 
+//ejs setup
+
+app.set('view engine', 'ejs')
+
 //router
 app.use("/api/auth",require("./features/auth/routes/auth"))
 app.use("/api/users",require("./features/auth/routes/users"))
-
-
-
+app.use("/password",require("./features/auth/routes/auth"))
 
 //err handling
 app.all("*",(req,res,next)=>{
